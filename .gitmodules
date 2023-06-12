@@ -1,0 +1,4 @@
+[submodule "edspdf_poppler/poppler_src"]
+	path = edspdf_poppler/poppler_src
+	url = https://anongit.freedesktop.org/git/poppler/poppler.git
+        shallow = false
