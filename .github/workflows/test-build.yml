@@ -1,0 +1,48 @@
+# This tries to build packages, and tests the packages.
+# It runs on every push to branches following the pattern v*.*.*.
+# It makes sure that everything will run when the version is released.
+
+name: Test Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - v*.*.*
+      - build-*
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      # We need to manually clone the repository with submodules because the poppler
+      # repo does not allow specific commits to be directly fetched, and the github checkout action
+      # split cloning into initial cloning and fetching submodules, which leads git to
+      # only try to directly fetch the specific commit of the submodule.
+      - name: Manually clone repository with submodules
+        run: |
+          git clone --recurse-submodules https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git .
+          git checkout ${{ github.ref }}
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.13.1
+        env:
+          CIBW_ARCHS_MACOS: x86_64 arm64
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Manually clone repository with submodules
+        run: |
+          git clone --recurse-submodules https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git .
+          git checkout ${{ github.ref }}
+
+      - name: Build sdist
+        run: pipx run build --sdist

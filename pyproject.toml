@@ -114,3 +114,37 @@ requires = [
     "cython",
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel]
+test-requires = "pytest"
+test-command = "pytest {project}"
+skip = [
+    "*p36-*", # Skip Python 3.6
+    "pp*", # Skip PyPy
+    "*-win32", # Skip 32-bit Windows
+    "*-manylinux_i686", # Skip 32-bit Linux
+    "*-win_arm64", # Skip experimental Windows on ARM
+    "*-musllinux*", # Skip slow Linux
+    "*-manylinux_aarch64", # Skip slow Linux
+    "*-manylinux_ppc64le", # Skip slow Linux
+    "*-manylinux_s390x", # Skip slow Linux
+]
+
+[tool.cibuildwheel.linux]
+before-all = """
+if command -v apt-get &> /dev/null; then
+    apt-get update
+    apt-get install -y libfreetype6-dev fontconfig
+elif command -v yum &> /dev/null; then
+    yum install -y freetype-devel fontconfig-devel
+else
+    echo "No package manager found"
+    exit 1
+fi
+"""
+
+[tool.cibuildwheel.macos]
+# we also install gnu-sed to overcome the linux specific usage of sed in poppler's
+# CMakeLists.txt, and because we cannot upgrade poppler to enable manylinux_2014 builds
+before-all = "brew install freetype fontconfig gnu-sed"
+environment = { "PATH" = "/usr/local/opt/gnu-sed/libexec/gnubin:$PATH", "MACOSX_DEPLOYMENT_TARGET" = "10.13" }
