@@ -21,6 +21,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pre-commit~=2.18.1",
+    "pytest~=7.1.1",
+    "pytest-cov~=3.0.0",
 ]
 docs = [
     "mike~=1.1.2",
@@ -68,6 +70,11 @@ omit-covered-files = false
 exclude_lines = [
     "raise NotImplementedError",
     "def __repr__",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
 ]
 
 [tool.mypy]
