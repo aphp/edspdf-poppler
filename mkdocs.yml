@@ -23,6 +23,7 @@ theme:
 
 nav:
   - index.md
+  - Code Reference: reference/
 
 extra_css:
   - assets/stylesheets/extra.css
@@ -37,6 +38,8 @@ extra_javascript:
 watch:
   - edspdf_poppler
 
+hooks:
+  - docs/scripts/plugin.py
 
 extra:
   version:
@@ -55,7 +58,7 @@ plugins:
         python:
           import:
             - https://aphp.github.io/edspdf/latest/objects.inv
-            - https://aphp.github.io/edspdf-mupdf/v0.2.0/objects.inv
+            - https://aphp.github.io/edspdf-mupdf/latest/objects.inv
           filters: [ "!poppler_src" ]
           options:
             docstring_style: numpy
