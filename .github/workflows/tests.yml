@@ -35,7 +35,7 @@ jobs:
       - name: Manually clone repository with submodules
         run: |
           git clone --recurse-submodules https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git .
-          git checkout ${{ github.ref }}
+          git checkout ${{ github.head_ref || github.ref_name }}
 
       - name: Cache downloaded resources
         uses: actions/cache@v3

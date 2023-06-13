@@ -9,11 +9,7 @@ jobs:
   Documentation:
     runs-on: ubuntu-latest
     steps:
-      - name: Manually clone repository with submodules
-        run: |
-          git clone --recurse-submodules https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git .
-          git checkout ${{ github.ref }}
-
+      - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
 
       - name: Set PY variable
