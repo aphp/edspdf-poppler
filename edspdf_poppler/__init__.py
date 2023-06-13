@@ -13,7 +13,7 @@ except ModuleNotFoundError:
         "poppler-extractor component to parse PDFs."
     )
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 @registry.factory.register("poppler-extractor")
