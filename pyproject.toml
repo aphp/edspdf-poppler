@@ -146,5 +146,6 @@ fi
 [tool.cibuildwheel.macos]
 # we also install gnu-sed to overcome the linux specific usage of sed in poppler's
 # CMakeLists.txt, and because we cannot upgrade poppler to enable manylinux_2014 builds
+archs = ["x86_64", "arm64"]
 before-all = "brew install freetype fontconfig gnu-sed"
 environment = { "PATH" = "/usr/local/opt/gnu-sed/libexec/gnubin:$PATH", "MACOSX_DEPLOYMENT_TARGET" = "10.13" }
