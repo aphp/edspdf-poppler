@@ -7,12 +7,18 @@ on:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.os }}/${{ matrix.arch || '*' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: macos-latest
+            arch: x86_64
+          - os: macos-latest
+            arch: arm64
+          - os: ubuntu-latest
+            arch: '*'  # unused
 
     steps:
       # We need to manually clone the repository with submodules because the poppler
@@ -24,9 +30,10 @@ jobs:
           git clone --recurse-submodules https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git .
           git checkout ${{ github.head_ref || github.ref_name }}
 
-      # see pyproject.toml:tool.cibuildwheel section for parameters
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.13.1
+        env:
+          CIBW_ARCHS_MACOS: ${{ matrix.arch }}
 
       - uses: actions/upload-artifact@v3
         with:

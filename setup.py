@@ -27,6 +27,10 @@ cmake_flags = [
     "-DWITH_Cairo=OFF",
     "-DWITH_JPEG=OFF",
 ]
+if "CMAKE_OSX_ARCHITECTURES" in os.environ:
+    cmake_flags.append(
+        f"-DCMAKE_OSX_ARCHITECTURES={os.environ['CMAKE_OSX_ARCHITECTURES']}"
+    )
 
 if sys.platform == "darwin":
     pass

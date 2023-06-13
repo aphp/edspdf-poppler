@@ -6,7 +6,8 @@
 
 # edspdf-poppler
 
-edspdf-poppler provides a Poppler-based PDF parser component for [EDS-PDF](https://github.com/aphp/edspdf)
+edspdf-poppler provides a Poppler-based PDF parser component for [EDS-PDF](https://github.com/aphp/edspdf).
+We only provide prebuilt binaries for linux and macos. If you are on windows, you will need to build this lib from source.
 
 Beware, Poppler is **GPL-licensed**: edspdf-poppler is therefore also GPL-licensed, and any model depending on this component must be too.
 
