@@ -10,8 +10,10 @@ import mkdocs
 doc_reference = Path("docs/reference")
 shutil.rmtree(doc_reference, ignore_errors=True)
 os.makedirs(doc_reference, exist_ok=True)
-root = Path("edspdf_mupdf")
+root = Path("edspdf_poppler")
 for path in sorted(root.rglob("*.py")):
+    if "poppler_src" in str(path):
+        continue
     module_path = path.relative_to(root.parent).with_suffix("")
     doc_path = path.relative_to(root.parent).with_suffix(".md")
     full_doc_path = doc_reference / doc_path
@@ -27,7 +29,7 @@ for path in sorted(root.rglob("*.py")):
     with open(full_doc_path, "w") as fd:
         print(f"# `{ident}`\n", file=fd)
         print("::: " + ident, file=fd)
-        if root != "edspdf_mupdf":
+        if root != "edspdf_poppler":
             print("    options:", file=fd)
             print("        show_source: false", file=fd)
 
@@ -54,7 +56,7 @@ def on_files(files: mkdocs.structure.files.Files, config: mkdocs.config.Config):
                 if index.exists():
                     # Get name from h1 heading in index
                     name = index.read_text().split("\n")[0].strip("# ")
-                    if name.startswith("`edspdf_mupdf"):
+                    if name.startswith("`edspdf_poppler"):
                         name = name[1:-1].split(".")[-1]
                     files.append({name: get_nested_files(file)})
                 else:
@@ -62,7 +64,7 @@ def on_files(files: mkdocs.structure.files.Files, config: mkdocs.config.Config):
                     files.append({title: get_nested_files(file)})
             else:
                 name = file.read_text().split("\n")[0].strip("# ")
-                if name.startswith("`edspdf_mupdf"):
+                if name.startswith("`edspdf_poppler"):
                     name = name[1:-1].split(".")[-1]
                     files.append({name: str(file.relative_to(config["docs_dir"]))})
                 else:
